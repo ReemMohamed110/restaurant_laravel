@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\MenuItem;
+use App\Models\Categories;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 
@@ -13,7 +15,9 @@ class MenuController extends Controller
      */
     public function index()
     {
-        //
+        $items = MenuItem::with('category')->orderBy('category_id')->latest()->paginate(20);
+        $categories= Categories::all();
+        return view('pages.menu')->with(['items'=> $items,'categories'=>$categories]);
     }
 
     /**

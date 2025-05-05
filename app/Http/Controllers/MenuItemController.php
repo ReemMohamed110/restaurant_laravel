@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
+use App\Models\Categories;
 use App\Http\Requests\StoreMenuItemRequest;
 use App\Http\Requests\UpdateMenuItemRequest;
+use App\Models\Employee;
 
 class MenuItemController extends Controller
 {
@@ -13,7 +15,10 @@ class MenuItemController extends Controller
      */
     public function index()
     {
-        //
+        $items = MenuItem::with('category')->orderBy('category_id')->latest()->paginate(20);
+        $categories= Categories::all();
+        $chief=Employee::where('role', 'chief')->get();
+        return view('home')->with(['items'=> $items,'categories'=>$categories,'chiefs'=>$chief]);
     }
 
     /**

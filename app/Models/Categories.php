@@ -9,10 +9,12 @@ class Categories extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoriesFactory> */
     use HasFactory;
-    public function menuItems(){
-        return $this->hasMany(menuItem::class);
+    public function menuItems()
+    {
+        return $this->hasMany(MenuItem::class,'category_id');
     }
-    public function menu(){
+    public function menu()
+    {
         return $this->belongsTo(Menu::class);
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\ProfileController;
 use App\Mail\registerEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MenuItemController;
 
 Route::get('/', function () {
     return view('home');
@@ -12,13 +14,14 @@ Route::get('/', function () {
 
 
 
-Route::get('/dashboard', function () {
-    Mail::to('demo@mail.com')->send(new registerEmail());
-    return view('home');
-})->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('home');
+// })->name('dashboard');
 // Route::get('/dashboard', function () {
 //     return view('home');
 // })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [MenuItemController::class,'index'])->name('dashboard');
+Route::get('menu', [MenuController::class,'index'])->name('menu');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,7 +34,6 @@ Route::get('/contact', 'contact');
 Route::get('/services', 'services')->name('services');
 Route::get('/team', 'team')->name('team');
 Route::get('/testimonial', 'testimonial')->name('testimonial');
-Route::get('/menu', 'menu')->name('menu');
 Route::get('about', 'about');
 });
 Route::get('adminDashboard', function () {
