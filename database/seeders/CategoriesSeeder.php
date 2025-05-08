@@ -14,6 +14,6 @@ class CategoriesSeeder extends Seeder
     protected $fillable=['name','menu_id','status'];
     public function run(): void
     {
-        Categories::factory()->count(20)->create();
+        Categories::factory()->count(5)->create();
     }
 }

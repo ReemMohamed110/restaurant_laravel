@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
@@ -13,7 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts=Post::with('user')->paginate(10);
+        return view('admin.pages.allPosts')->with(['posts'=>$posts]);
     }
 
     /**
@@ -21,7 +24,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.addPost');
     }
 
     /**
@@ -29,7 +32,12 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        Post::create([
+            'title'=>$request->tittle,
+             'content'=>$request->content,
+             'user_id'=>Auth::id(),
+        ]);
+        return redirect()->back()->with('success','post added successfully');
     }
 
     /**
@@ -59,8 +67,15 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Post $post,string $id)
     {
-        //
+        $post=Post::find($id);
+        if ($post->image) {
+        Storage::disk('public')->delete($post->image);
+    }
+    Post::destroy($post->id);
+        return back()->with('deleted', 'post deleted successfully');
+    
+    
     }
 }

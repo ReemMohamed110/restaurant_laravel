@@ -18,7 +18,7 @@ class CategoriesFactory extends Factory
     public function definition(): array
     { 
         return [
-            'name' => fake()->name(),
+            'name' => fake()->word(),
             'status'=>fake()->randomElement(['active', 'not active']),
             'menu_id'=>1,
         ];

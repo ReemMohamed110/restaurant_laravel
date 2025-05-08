@@ -15,7 +15,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $items = MenuItem::with('category')->orderBy('category_id')->latest()->paginate(20);
+        $items = MenuItem::with('category')->orderBy('category_id');
         $categories= Categories::all();
         return view('pages.menu')->with(['items'=> $items,'categories'=>$categories]);
     }

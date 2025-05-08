@@ -23,7 +23,7 @@ class MenuItemFactory extends Factory
             'image' => null, 
             'status' => fake()->randomElement(['active', 'not active']), 
             'price' => fake()->randomFloat(2, 1, 100), 
-            'category_id' => Categories::factory(),
+            'category_id' =>rand(1,5),
         ];
     }
 }

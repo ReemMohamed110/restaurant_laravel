@@ -15,6 +15,6 @@ class MenuItemSeeder extends Seeder
     protected $fillable=['name','description','image','status','price','category_id'];
     public function run(): void
     {
-        MenuItem::factory()->count(20)->create();
+        MenuItem::factory()->count(100)->create();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreCategoriesRequest;
 use App\Http\Requests\UpdateCategoriesRequest;
 
@@ -13,7 +14,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Categories::all();
+        return view('admin.pages.allCategories')->with(['categories' => $categories]);
     }
 
     /**
@@ -21,7 +23,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.addCategory');
     }
 
     /**
@@ -29,7 +31,14 @@ class CategoriesController extends Controller
      */
     public function store(StoreCategoriesRequest $request)
     {
-        //
+        Categories::create([
+            'name' => $request->name,
+            'status' => $request->status,
+            // 'image'=>$request->image,
+            'menu_id'=>1,
+
+        ]);
+        return redirect()->back()->with('success','category added successfully');
     }
 
     /**
@@ -59,8 +68,14 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categories $categories)
+    public function destroy(Categories $categories,string $id)
     {
-        //
+        $category=Categories::find($id);
+        if ($category->image) {
+        Storage::disk('public')->delete($category->image);
+    }
+    Categories::destroy($category->id);
+        return back()->with('deleted', 'category deleted successfully');
     }
 }
+ 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 
@@ -13,7 +14,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        $employees=Employee::paginate(10);
+        return view('admin.pages.allEmployees')->with(['employees'=>$employees]);
     }
 
     /**
@@ -21,7 +23,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.addEmployee');
     }
 
     /**
@@ -29,7 +31,21 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-        //
+        Employee::create([
+            'name' => $request->name,
+            'status' => $request->status,
+            'role' => $request->role,
+            'salary' => $request->salary,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'birthdate' => $request->birthdate,
+            'gender' => $request->gender,
+            'nationalID' => $request->nationalID,
+            'image' => $request->image,
+            
+
+        ]);
+        return redirect()->back()->with('success','employee added successfully');
     }
 
     /**
@@ -59,8 +75,14 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee,string $id)
     {
-        //
+        $employee=Employee::find($id);
+        if ($employee->image) {
+        Storage::disk('public')->delete($employee->image);
+    }
+    Employee::destroy($employee->id);
+        return back()->with('deleted', 'employee deleted successfully');
+    
     }
 }

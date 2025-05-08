@@ -15,12 +15,16 @@ class MenuItemController extends Controller
      */
     public function index()
     {
-        $items = MenuItem::with('category')->orderBy('category_id')->latest()->paginate(20);
+        $items = MenuItem::with('category')->orderBy('category_id')->latest()->paginate(3);
         $categories= Categories::all();
         $chief=Employee::where('role', 'chief')->get();
         return view('home')->with(['items'=> $items,'categories'=>$categories,'chiefs'=>$chief]);
     }
-
+    public function allItems()
+    {
+        $items = MenuItem::with('category')->orderBy('category_id')->latest()->paginate(20);
+        return view('admin.pages.allItems')->with(['items'=> $items]);
+    }
     /**
      * Show the form for creating a new resource.
      */
